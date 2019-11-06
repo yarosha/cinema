@@ -1,1 +1,1 @@
-__init__
+from .core import CinemaParser
