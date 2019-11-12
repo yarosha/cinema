@@ -29,7 +29,31 @@ class CinemaParser():
         for i in all_films:
             films.append(i["attr-title"])
         return films
-
-#MSK_PARSER = CinemaParser('msk')
-#print(MSK_PARSER.get_films_list())
-# MSK_PARSER.print_raw_content()
+    def get_films_nearest_session(self, film):
+        """Ближайшее время сеанса сегодня"""
+        self.extract_raw_content()
+        self.get_films_list()
+        beauty = BeautifulSoup(self.content, 'html.parser')
+        names = beauty.find_all(class_ = 'movie-plate')
+        for name in names:
+            if name.get('attr-title') == film
+            url = 'https://subscity/subscity/' + self.city + name.find('a').get('href')
+            response = requests.get(url)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            cinemas = soup.find_all(class_ = 'row-entity')
+            time_cinema = {}
+            for cinema in cinemas:
+                for cur_time in cinema.find_all(class_= 'text-center cell-screenings'):
+                    cur_time = int(cur_time.get('attr-time'))
+                    name = cinema.find(class_='underdashed').text
+                    if time.time() < cur_time:
+                        time_cinema[cur_time + 3600*3] = name
+            time_cinema = sorted(time_cinema.items(), key = lambda key: key[0]
+            earliest = datetime.utcfromtimestamp(time_ciema[0][0])
+            now = datetime.today().strftime('%x')
+            if earliest.strftime('%x') != now or len(time_cinema) == 0:
+                return None, None
+            return time_cinema[0][1], earliest.strftime('%H:%M')
+        return None, None
+            
+                
